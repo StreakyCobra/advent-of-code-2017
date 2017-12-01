@@ -66,3 +66,26 @@ fn solve_generic_part(digits: &String, func: &Fn(usize) -> usize) -> u32 {
     // Return the solution
     return sum
 }
+
+#[cfg(test)]
+mod tests {
+
+    use super::{solve_first_part, solve_second_part};
+
+    #[test]
+    fn test_cases_first_part() {
+        assert_eq!(solve_first_part(&"1122".to_string()), 3);
+        assert_eq!(solve_first_part(&"1111".to_string()), 4);
+        assert_eq!(solve_first_part(&"1234".to_string()), 0);
+        assert_eq!(solve_first_part(&"91212129".to_string()), 9);
+    }
+
+    #[test]
+    fn test_cases_second_part() {
+        assert_eq!(solve_second_part(&"1212".to_string()), 6);
+        assert_eq!(solve_second_part(&"1221".to_string()), 0);
+        assert_eq!(solve_second_part(&"123425".to_string()), 4);
+        assert_eq!(solve_second_part(&"123123".to_string()), 12);
+        assert_eq!(solve_second_part(&"12131415".to_string()), 4);
+    }
+}
