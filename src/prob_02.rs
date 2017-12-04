@@ -70,14 +70,14 @@ mod tests {
     use super::{solve_first_part, solve_second_part};
 
     #[test]
-    fn test_cases_first_part() {
+    fn second_problem_first_part() {
         assert_eq!(solve_first_part(&vec![vec![5, 1, 9, 5],
                                           vec![7, 5, 3],
                                           vec![2, 4, 6, 8]]), 18);
     }
 
     #[test]
-    fn test_cases_second_part() {
+    fn second_problem_second_part() {
         assert_eq!(solve_second_part(&vec![vec![5, 9, 2, 8],
                                            vec![9, 4, 7, 3],
                                            vec![3, 8, 6, 5]]), 9);

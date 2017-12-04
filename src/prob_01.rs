@@ -73,7 +73,7 @@ mod tests {
     use super::{solve_first_part, solve_second_part};
 
     #[test]
-    fn test_cases_first_part() {
+    fn first_problem_first_part() {
         assert_eq!(solve_first_part(&"1122".to_string()), 3);
         assert_eq!(solve_first_part(&"1111".to_string()), 4);
         assert_eq!(solve_first_part(&"1234".to_string()), 0);
@@ -81,7 +81,7 @@ mod tests {
     }
 
     #[test]
-    fn test_cases_second_part() {
+    fn first_problem_second_part() {
         assert_eq!(solve_second_part(&"1212".to_string()), 6);
         assert_eq!(solve_second_part(&"1221".to_string()), 0);
         assert_eq!(solve_second_part(&"123425".to_string()), 4);
