@@ -21,9 +21,9 @@ pub fn solve() {
             process::exit(1)
         }
     };
-    let maze : Vec<i32> = content.lines()
+    let maze : Vec<isize> = content.lines()
                                  .map(|line|
-                                       line.parse::<i32>()
+                                       line.parse::<isize>()
                                            .unwrap())
                                  .collect();
     // Compute and print the solutions of the two parts
@@ -32,36 +32,27 @@ pub fn solve() {
     println!("\tSecond part: {}", solve_second_part(&mut maze.clone()));
 }
 
-fn solve_first_part(maze : &mut Vec<i32>) -> u32 {
-    let mut count : u32 = 0;
-    let mut pos : i32 = 0;
+fn solve_generic(maze : &mut Vec<isize>, func: &Fn(isize) -> isize) -> usize {
+    let mut count : usize = 0;
+    let mut pos : isize = 0;
     loop {
         count += 1;
-        let next = pos + maze[pos as usize];
+        let inc = maze[pos as usize];
+        let next = pos + inc;
         if next < 0 { break };
         if next as usize >= maze.len() { break };
-        maze[pos as usize] += 1;
+        maze[pos as usize] += func(inc);
         pos = next;
     }
     count
 }
 
-fn solve_second_part(maze : &mut Vec<i32>) -> u32 {
-    let mut count : u32 = 0;
-    let mut pos : i32 = 0;
-    loop {
-        count += 1;
-        let next = pos + maze[pos as usize];
-        if next < 0 { break };
-        if next as usize >= maze.len() { break };
-        if maze[pos as usize] >= 3 {
-            maze[pos as usize] -= 1;
-        } else {
-            maze[pos as usize] += 1;
-        }
-        pos = next;
-    }
-    count
+fn solve_first_part(maze : &mut Vec<isize>) -> usize {
+    solve_generic(maze, &|_| 1)
+}
+
+fn solve_second_part(maze : &mut Vec<isize>) -> usize {
+    solve_generic(maze, &|i| if i >= 3 { -1 } else { 1 })
 }
 
 #[cfg(test)]
