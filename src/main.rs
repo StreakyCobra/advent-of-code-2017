@@ -7,6 +7,7 @@ mod prob_02;
 mod prob_03;
 mod prob_04;
 mod prob_05;
+mod prob_06;
 
 /// Run the solver for the solutions of the Advent Of Code 2017
 fn main() {
@@ -17,4 +18,5 @@ fn main() {
     prob_03::solve();
     prob_04::solve();
     prob_05::solve();
+    prob_06::solve();
 }
