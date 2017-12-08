@@ -1,4 +1,5 @@
 #![feature(iterator_step_by)]
+#![feature(entry_or_default)]
 
 extern crate itertools;
 
@@ -9,6 +10,7 @@ mod prob_04;
 mod prob_05;
 mod prob_06;
 mod prob_07;
+mod prob_08;
 
 /// Run the solver for the solutions of the Advent Of Code 2017
 fn main() {
@@ -21,4 +23,5 @@ fn main() {
     prob_05::solve();
     prob_06::solve();
     prob_07::solve();
+    prob_08::solve();
 }
