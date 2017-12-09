@@ -117,7 +117,7 @@ fn solve_generic(instructions: &Vec<Instruction>) -> (i32, i32) {
                 Operation::Dec => registers.insert(regname, reg_value - instruction.value),
             };
         };
-        all_max = max(all_max, *registers.values().max().unwrap());
+        all_max = max(all_max, *registers.values().max().unwrap_or(&0));
     }
     (*registers.values().max().unwrap(), all_max)
 }
