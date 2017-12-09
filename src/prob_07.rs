@@ -36,7 +36,7 @@ fn parse(content: String) -> HashMap<String, (u32, Vec<String>)> {
                let name = String::from(parts.next().unwrap());
                let weight = parts.next().unwrap();
                let weight = (&weight)[1..(weight.len()-1)].parse().unwrap();
-               parts.next();
+               parts.next(); // Skip arrow
                let rest: String = parts.collect();
                let children: Vec<String> = rest.split(",")
                                                .map(|v| String::from(v))
@@ -83,10 +83,35 @@ fn real_weights(map: &HashMap<String, (u32, Vec<String>)>) -> HashMap<String, u3
     weights
 }
 
+fn different(weights: &HashMap<String, u32>, elems: &Vec<String>) -> Option<(String, u32)> {
+    let mut counts: HashMap<u32, Vec<String>> = HashMap::new();
+    for val in elems {
+        counts.entry(*weights.get(val).unwrap()).or_insert(vec![]).push(val.clone());
+    }
+    if counts.len() == 1 { return None };
+    let min = counts.iter().min_by_key(|&(k, v)| v.len()).unwrap().1;
+    let val = counts.iter().max_by_key(|&(k, v)| v.len()).unwrap().0;
+    Some((min[0].clone(), *val))
+}
+
+fn find_wrong(val: &String, map: &HashMap<String, (u32, Vec<String>)>, weights: &HashMap<String, u32>) -> u32 {
+    let &(_, ref children) = map.get(val).unwrap();
+    let mut diff = different(&weights, &children);
+    let mut last = None;
+    while diff != None {
+        last = diff.clone();
+        let &(_, ref children) = map.get(&diff.unwrap().0).unwrap();
+        diff = different(&weights, &children);
+    }
+    let target_rw = last.clone().unwrap().1; 
+    let current_rw = weights.get(&last.clone().unwrap().0).unwrap();
+    let current_w = map.get(&last.clone().unwrap().0).unwrap().0;
+    current_w - (current_rw - target_rw)
+}
+
 fn solve_second_part(content: String) -> u32 {
     let map = parse(content);
-    println!("{:?}", &real_weights(&map));
-    0
+    find_wrong(&find_root(&map), &map, &real_weights(&map))
 }
 
 #[cfg(test)]
