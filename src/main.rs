@@ -1,5 +1,6 @@
 #![feature(iterator_step_by)]
 #![feature(entry_or_default)]
+#![feature(advanced_slice_patterns, slice_patterns)]
 
 extern crate itertools;
 
@@ -12,6 +13,7 @@ mod prob_06;
 mod prob_07;
 mod prob_08;
 mod prob_09;
+mod prob_10;
 
 /// Run the solver for the solutions of the Advent Of Code 2017
 fn main() {
@@ -26,4 +28,5 @@ fn main() {
     prob_07::solve();
     prob_08::solve();
     prob_09::solve();
+    prob_10::solve();
 }
