@@ -89,8 +89,8 @@ fn different(weights: &HashMap<String, u32>, elems: &Vec<String>) -> Option<(Str
         counts.entry(*weights.get(val).unwrap()).or_insert(vec![]).push(val.clone());
     }
     if counts.len() == 1 { return None };
-    let min = counts.iter().min_by_key(|&(k, v)| v.len()).unwrap().1;
-    let val = counts.iter().max_by_key(|&(k, v)| v.len()).unwrap().0;
+    let min = counts.iter().min_by_key(|&(_, v)| v.len()).unwrap().1;
+    let val = counts.iter().max_by_key(|&(_, v)| v.len()).unwrap().0;
     Some((min[0].clone(), *val))
 }
 
