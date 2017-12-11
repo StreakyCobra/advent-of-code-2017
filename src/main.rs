@@ -4,6 +4,8 @@
 
 extern crate itertools;
 
+use std::env;
+
 mod prob_01;
 mod prob_02;
 mod prob_03;
@@ -18,17 +20,38 @@ mod prob_11;
 
 /// Run the solver for the solutions of the Advent Of Code 2017
 fn main() {
+    let mut problem: Option<u32> = None;
+    let args: Vec<String> = env::args().collect();
+    if args.len() >= 2 {
+        problem = args[1].parse::<u32>().ok();
+    }
     println!("Solutions to the Advent of Code 2017");
     println!("====================================\n");
-    prob_01::solve();
-    prob_02::solve();
-    prob_03::solve();
-    prob_04::solve();
-    prob_05::solve();
-    prob_06::solve();
-    prob_07::solve();
-    prob_08::solve();
-    prob_09::solve();
-    prob_10::solve();
-    prob_11::solve();
+    match problem {
+        Some(1) => prob_01::solve(),
+        Some(2) => prob_02::solve(),
+        Some(3) => prob_03::solve(),
+        Some(4) => prob_04::solve(),
+        Some(5) => prob_05::solve(),
+        Some(6) => prob_06::solve(),
+        Some(7) => prob_07::solve(),
+        Some(8) => prob_08::solve(),
+        Some(9) => prob_09::solve(),
+        Some(10) => prob_10::solve(),
+        Some(11) => prob_11::solve(),
+        Some(_) => panic!("Solution not implemented… yet?"),
+        None => {
+            prob_01::solve();
+            prob_02::solve();
+            prob_03::solve();
+            prob_04::solve();
+            prob_05::solve();
+            prob_06::solve();
+            prob_07::solve();
+            prob_08::solve();
+            prob_09::solve();
+            prob_10::solve();
+            prob_11::solve();
+        }
+    }
 }
