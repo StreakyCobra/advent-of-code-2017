@@ -62,7 +62,7 @@ fn solve_first_part(size: usize, lengths: &Vec<usize>) -> usize {
     }
 }
 
-fn solve_second_part(size: usize, value: &str) -> String {
+pub fn solve_second_part(size: usize, value: &str) -> String {
     let mut lengths: Vec<usize> = value.chars().map(|v| format!("{}", v as u8).parse().unwrap()).collect();
     lengths.extend_from_slice(&vec![17, 31, 73, 47, 23]);
     let mut buf: Vec<usize> = (0..size).collect();
@@ -82,8 +82,7 @@ fn solve_second_part(size: usize, value: &str) -> String {
     }
     buf.chunks(16)
        .map(|block| block.iter().fold(0, |a, b| a ^ b))
-       .map(|xor| format!("{:x}", xor))
-       .map(|hex| if hex.len() < 2 { format!("0{}", hex) } else { hex })
+       .map(|xor| format!("{:02x}", xor))
        .collect()
 }
 
