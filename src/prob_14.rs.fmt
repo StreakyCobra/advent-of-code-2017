@@ -1,0 +1,91 @@
+use std::fs::File;
+use std::io::Read;
+use std::process;
+use std::collections::HashMap;
+use prob_10::solve_second_part as knot_hash;
+
+/// Solve the fourteenth problem.
+pub fn solve() {
+    // Open the input file of the problem
+    let mut file = match File::open("input/14.txt") {
+        Ok(file) => file,
+        Err(_) => {
+            eprintln!("Error: Input file for the problem 14 not found");
+            process::exit(1)
+        }
+    };
+    // Read the file in a String variable
+    let mut content: String = String::new();
+    match file.read_to_string(&mut content) {
+        Ok(_) => (),
+        Err(_) => {
+            eprintln!("Error: Input file for the problem 14 can't be read");
+            process::exit(1)
+        }
+    };
+    let key = content.trim();
+    // Compute and print the solutions of the two parts
+    println!("14. Solutions to the fourteenth problem:");
+    println!("\tFirst part: {}", solve_first_part(&key));
+    println!("\tSecond part: {}", solve_second_part(&key));
+}
+
+fn solve_generic(mut banks: Vec<isize>) -> (usize, usize) {
+    let mut step = 1usize;
+    let mut seen: HashMap<Vec<isize>, usize> = HashMap::new();
+    seen.insert(banks.clone(), 0);
+    loop {
+        // Find the biggest bank position and value
+        let (p, c) = banks.clone()
+                          .into_iter()
+                          .enumerate()
+                          .max_by_key(|&(i, v)| (v, 0-i as isize))
+                          .unwrap();
+        // Set it to zero
+        banks[p] = 0;
+        // Distribute its value to next banks
+        for i in 1..c+1 {
+            let j = (p + i as usize) % banks.len();
+            banks[j] += 1;
+        }
+        // If the situation has already been seen, return the current step and the cycle
+        if seen.contains_key(&banks) {
+            return (step, step - seen[&banks])
+        }
+        // Othewise store the current situation as seen
+        seen.insert(banks.clone(), step);
+        // Increase the counter
+        step += 1;
+    }
+}
+
+fn solve_first_part(key: &str) -> usize {
+    (0..128).map(|i| knot_hash(256, &format!("{}-{}", &key, i)))
+            .map(|h| h.chars()
+                      .map(|c| format!("{:04b}", c.to_digit(16).unwrap()))
+                      .collect::<String>())
+            .map(|b| b.chars().filter(|c| *c == '1').collect::<String>())
+            .map(|h| h.len())
+            .sum()
+}
+
+fn solve_second_part(key: &str) -> usize {
+    0
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::{solve_first_part, solve_second_part};
+
+    #[test]
+    fn fourteenth_problem_first_part() {
+        assert_eq!(solve_first_part("flqrgnkx"), 8108);
+    }
+
+    #[test]
+    fn fourteenth_problem_second_part() {
+        assert_eq!(solve_second_part("flqrgnkx"), 12420);
+    }
+
+}

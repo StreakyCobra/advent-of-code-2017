@@ -19,6 +19,7 @@ mod prob_10;
 mod prob_11;
 mod prob_12;
 mod prob_13;
+mod prob_14;
 
 /// Run the solver for the solutions of the Advent Of Code 2017
 fn main() {
@@ -43,6 +44,7 @@ fn main() {
         Some(11) => prob_11::solve(),
         Some(12) => prob_12::solve(),
         Some(13) => prob_13::solve(),
+        Some(14) => prob_14::solve(),
         Some(_) => panic!("Solution not implemented… yet?"),
         None => {
             prob_01::solve();
@@ -58,6 +60,7 @@ fn main() {
             prob_11::solve();
             prob_12::solve();
             prob_13::solve();
+            prob_14::solve();
         }
     }
 }
