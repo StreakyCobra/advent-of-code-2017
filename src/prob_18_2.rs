@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::Read;
 use std::process;
-use std::collections::HashMap;
+use std::collections::{HashMap, VecDeque};
 
 type Program = Vec<Instruction>;
 
@@ -15,7 +15,7 @@ impl Val {
     fn new(value: &str) -> Val {
         match value.chars().nth(0) {
             Some(v) if v.is_digit(10) || v == '-' => Val::Int(value.parse::<isize>().unwrap()),
-            Some(v) => Val::Reg(value.chars().nth(0).unwrap()),
+            Some(_) => Val::Reg(value.chars().nth(0).unwrap()),
             None => panic!("Malformed input"),
         }
     }
@@ -68,10 +68,11 @@ impl Instruction {
         }
     }
 
-    fn execute(self, vproc: &mut Proc) -> bool {
+    fn execute(self, vproc: &mut Proc, vproc_other: &mut Proc) -> bool {
         match self {
             Instruction::Snd(a) => {
-                vproc.last = Some(a.value(vproc));
+                vproc_other.queue.push_back(a.value(vproc));
+                vproc.snd_count += 1;
                 true
             },
             Instruction::Set(a, b) => {
@@ -103,7 +104,15 @@ impl Instruction {
                 true
             },
             Instruction::Rcv(a) => {
-                if a.value(vproc) != 0 { return false }
+                if vproc.queue.len() == 0 {
+                    vproc.is_waiting = true;
+                    vproc.pc -= 1;
+                    return true
+                }
+                if let Val::Reg(a) = a {
+                    vproc.is_waiting = false;
+                    vproc.regs.insert(a, vproc.queue.pop_front().unwrap());
+                }
                 true
             },
             Instruction::Jgz(a, b) => {
@@ -118,27 +127,35 @@ impl Instruction {
 
 #[derive(Debug, Clone)]
 struct Proc {
+    name: usize,
     instructions: Program,
     pc: usize,
     regs: HashMap<char, isize>,
     last: Option<isize>,
+    queue: VecDeque<isize>,
+    snd_count: usize,
+    is_waiting: bool,
 }
 
 impl Proc {
-    fn new(instructions: Program) -> Proc {
+    fn new(name: usize, instructions: Program) -> Proc {
         Proc {
+            name,
             instructions,
             pc: 0,
             regs: HashMap::new(),
-            last: None
+            last: None,
+            queue: VecDeque::new(),
+            snd_count: 0,
+            is_waiting: false,
         }
     }
 
-    fn run(&mut self) -> bool {
+    fn run(&mut self, other: &mut Proc) -> bool {
         if self.pc >= self.instructions.len() { return false }
         let instruction = self.instructions[self.pc as usize].clone();
         self.pc = self.pc + 1;
-        let v = instruction.execute(self);
+        let v = instruction.execute(self, other);
         v
     }
 }
@@ -166,39 +183,46 @@ pub fn solve() {
         .lines()
         .map(|line| Instruction::new(line.trim()))
         .collect();
-    // Compute and print the solutions of the two parts
-    println!("18. Solutions to the eighteenth problem:");
-    println!("\tFirst part: {}", solve_first_part(&instructions));
+    // Compute and print the solutions of the second part
+    println!("\tSecond part: {}", solve_second_part(&instructions));
 }
 
-fn solve_first_part(instructions: &Vec<Instruction>) -> isize {
-    let mut vproc = Proc::new((*instructions).clone());
-    while vproc.run() {}
-    vproc.last.unwrap()
+
+fn solve_second_part(instructions: &Vec<Instruction>) -> usize {
+    let mut vproc0 = Proc::new(0, (*instructions).clone());
+    let mut vproc1 = Proc::new(1, (*instructions).clone());
+    vproc0.regs.insert('p', 0);
+    vproc1.regs.insert('p', 1);
+    let mut v0_finish = false;
+    let mut v1_finish = false;
+    loop {
+        if !v0_finish && !vproc0.run(&mut vproc1) { v0_finish = true }
+        if !v1_finish && !vproc1.run(&mut vproc0) { v1_finish = true }
+        if v0_finish && v1_finish { break }
+        if vproc0.is_waiting && vproc1.is_waiting {break}
+    }
+    vproc1.snd_count
 }
 
 #[cfg(test)]
 mod tests {
 
-    use super::{Instruction, solve_first_part};
+    use super::{Instruction, solve_second_part};
 
-    const CONTENT: &str = "set a 1
-                           add a 2
-                           mul a a
-                           mod a 5
-                           snd a
-                           set a 0
+    const CONTENT: &str = "snd 1
+                           snd 2
+                           snd p
                            rcv a
-                           jgz a -1
-                           set a 1
-                           jgz a -2";
+                           rcv b
+                           rcv c
+                           rcv d";
 
     #[test]
-    fn eighteenth_problem_first_part() {
+    fn eighteenth_problem_second_part() {
         let instructions = CONTENT.lines()
                                   .map(|line| Instruction::new(line.trim()))
                                   .collect();
-        assert_eq!(solve_first_part(&instructions), 4);
+        assert_eq!(solve_second_part(&instructions), 3);
     }
 
 }
