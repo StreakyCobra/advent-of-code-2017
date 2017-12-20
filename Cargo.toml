@@ -4,4 +4,8 @@ version = "0.1.0"
 authors = ["Fabien Dubosson <fabien.dubosson@gmail.com>"]
 
 [dependencies]
-itertools="*"
+itertools="^0.7"
+
+[dependencies.nom]
+version = "^3.2"
+features = ["nightly"]
