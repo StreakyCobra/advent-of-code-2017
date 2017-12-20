@@ -58,27 +58,6 @@ fn main() {
         Some(182) => prob_18_2::solve(),
         Some(19) => prob_19::solve(),
         Some(_) => panic!("Solution not implemented… yet?"),
-        None => {
-            prob_01::solve();
-            prob_02::solve();
-            prob_03::solve();
-            prob_04::solve();
-            prob_05::solve();
-            prob_06::solve();
-            prob_07::solve();
-            prob_08::solve();
-            prob_09::solve();
-            prob_10::solve();
-            prob_11::solve();
-            prob_12::solve();
-            prob_13::solve();
-            prob_14::solve();
-            prob_15::solve();
-            prob_16::solve();
-            prob_17::solve();
-            prob_18::solve();
-            prob_18_2::solve();
-            prob_19::solve();
-        }
+        None => panic!("Please provide the problem number")
     }
 }
