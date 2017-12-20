@@ -15,7 +15,7 @@ impl Val {
     fn new(value: &str) -> Val {
         match value.chars().nth(0) {
             Some(v) if v.is_digit(10) || v == '-' => Val::Int(value.parse::<isize>().unwrap()),
-            Some(v) => Val::Reg(value.chars().nth(0).unwrap()),
+            Some(_) => Val::Reg(value.chars().nth(0).unwrap()),
             None => panic!("Malformed input"),
         }
     }

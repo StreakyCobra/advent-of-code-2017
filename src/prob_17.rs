@@ -37,7 +37,7 @@ fn solve_second_part(step: usize) -> usize {
 #[cfg(test)]
 mod tests {
 
-    use super::{solve_first_part, solve_second_part};
+    use super::solve_first_part;
 
     #[test]
     fn seventeenth_problem_first_part() {
