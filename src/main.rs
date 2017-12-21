@@ -4,6 +4,9 @@
 
 extern crate itertools;
 
+#[macro_use(s)]
+extern crate ndarray;
+
 #[macro_use]
 extern crate nom;
 
@@ -30,6 +33,7 @@ mod prob_18;
 mod prob_18_2;
 mod prob_19;
 mod prob_20;
+mod prob_21;
 
 /// Run the solver for the solutions of the Advent Of Code 2017
 fn main() {
@@ -62,6 +66,7 @@ fn main() {
         Some(182) => prob_18_2::solve(),
         Some(19) => prob_19::solve(),
         Some(20) => prob_20::solve(),
+        Some(21) => prob_21::solve(),
         Some(_) => panic!("Solution not implemented… yet?"),
         None => panic!("Please provide the problem number")
     }

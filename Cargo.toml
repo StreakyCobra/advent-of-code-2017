@@ -5,6 +5,7 @@ authors = ["Fabien Dubosson <fabien.dubosson@gmail.com>"]
 
 [dependencies]
 itertools="^0.7"
+ndarray = "^0.10"
 
 [dependencies.nom]
 version = "^3.2"
