@@ -112,8 +112,8 @@ fn eliminate_duplicates(particles: &mut Vec<Particle>) {
         }
     }
     let wrongs = grps.iter()
-                     .filter(|&(k, v)| v.len() > 1)
-                     .map(|(k, v)| v)
+                     .filter(|&(_, v)| v.len() > 1)
+                     .map(|(_, v)| v)
                      .flatten();
     for wrong in wrongs {
         particles.retain(|v| *v != *wrong);
